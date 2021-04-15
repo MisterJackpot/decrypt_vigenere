@@ -38,13 +38,15 @@ def guessKey(text, length):
         x = getNthLetters(text, i, length)
         smaller = -1
         shift = 0
-        for j in range(0, NUMBER_OF_LETTERS_PORTUGUESE_ALPHABET):
-            switchedText = caesarShift(x, -j)
+        counter = Counter(x)
+        for j in range(0, 3):
+            letter = ALPHABET.index(counter.most_common()[j][0])
+            switchedText = caesarShift(x, -letter)
             current = letterFrequenciesDifference(switchedText)
             if smaller == -1:
                 smaller = current
             if current < smaller:
-                shift = j
+                shift = letter
                 smaller = current
         guess = guess+ALPHABET[shift]
     return guess
@@ -65,14 +67,6 @@ def guessKeyLenght(encryptedText):
             keyLenght = i
             break
     return keyLenght
-
-def groupNthLetters(keyLenght, encryptedText):
-    encryptedTextList = []
-    for j in range(0,keyLenght):
-        text = getNthLetters(encryptedText, j, keyLenght)
-        print(Counter(text))
-        encryptedTextList.append(text)
-    return encryptedTextList
 
 def decryptText(keyLenght,key,encryptedText):
     shift = [0]*keyLenght
@@ -99,16 +93,14 @@ keyLenght = guessKeyLenght(encryptedText)
 
 print("Tamanho da palvra: " + str(keyLenght))
 
-encryptedTextList = groupNthLetters(keyLenght, encryptedText)
-
 key = guessKey(encryptedText, keyLenght)
 
 print("Chave: " + key)
 
 decryptedText = decryptText(keyLenght, key, encryptedText)
 
-print("Texto decifrado salvo em decryptedText.txt")
-    
 f = open("decryptedText.txt", "w")
 f.write(decryptedText)
 f.close()
+
+print("Texto decifrado salvo em decryptedText.txt")
