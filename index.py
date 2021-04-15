@@ -37,18 +37,18 @@ def guessKey(text, length):
     for i in range(0, length):
         x = getNthLetters(text, i, length)
         smaller = -1
-        shift = 0
+        shiftGuessed = 0
         counter = Counter(x)
         for j in range(0, 3):
-            letter = ALPHABET.index(counter.most_common()[j][0])
-            switchedText = caesarShift(x, -letter)
+            shift = ALPHABET.index(counter.most_common()[j][0])
+            switchedText = caesarShift(x, -shift)
             current = letterFrequenciesDifference(switchedText)
             if smaller == -1:
                 smaller = current
             if current < smaller:
-                shift = letter
+                shiftGuessed = shift
                 smaller = current
-        guess = guess+ALPHABET[shift]
+        guess = guess+ALPHABET[shiftGuessed]
     return guess
 
 def guessKeyLenght(encryptedText):
