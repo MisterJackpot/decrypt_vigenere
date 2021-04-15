@@ -21,12 +21,12 @@ def getNthLetters(text, start, n):
             value = value+text[i]
     return value
 
-def letterFrequencies(text):
-    kr = 0
+def letterFrequenciesDifference(text):
+    difference = 0
     for i in range(0,NUMBER_OF_LETTERS_PORTUGUESE_ALPHABET):
         occurences = text.count(ALPHABET[i])/len(text)
-        kr = kr + (occurences-PORTUGUESE_LETTER_FREQUENCIES[i])**2
-    return kr
+        difference = difference + (occurences-PORTUGUESE_LETTER_FREQUENCIES[i])**2
+    return difference
 
 def caesarShift(text, shift):
     code = ALPHABET[shift:] + ALPHABET[:shift]
@@ -35,12 +35,12 @@ def caesarShift(text, shift):
 def guessKey(text, length):
     guess = ""
     for i in range(0, length):
-        t = getNthLetters(text, i, length)
+        x = getNthLetters(text, i, length)
         smaller = -1
         shift = 0
         for j in range(0, NUMBER_OF_LETTERS_PORTUGUESE_ALPHABET):
-            tl = caesarShift(t, -j)
-            current = letterFrequencies(tl)
+            switchedText = caesarShift(x, -j)
+            current = letterFrequenciesDifference(switchedText)
             if smaller == -1:
                 smaller = current
             if current < smaller:
@@ -87,7 +87,7 @@ def decryptText(keyLenght,key,encryptedText):
     return clearText
 
 if len(sys.argv) < 2:
-    print("Numero de argumentos incorreto")
+    print("Utilização: python .\\index.py {File Name}")
     quit
 
 encryptedFile = open(sys.argv[1], "r")
