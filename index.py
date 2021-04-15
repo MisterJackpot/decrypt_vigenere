@@ -92,6 +92,7 @@ if len(sys.argv) < 2:
 
 encryptedFile = open(sys.argv[1], "r")
 encryptedText = encryptedFile.read()
+encryptedText = encryptedText.lower()
 encryptedFile.close()
 
 keyLenght = guessKeyLenght(encryptedText)
@@ -104,8 +105,10 @@ key = guessKey(encryptedText, keyLenght)
 
 print("Chave: " + key)
 
-clearText = decryptText(keyLenght, key, encryptedText)
+decryptedText = decryptText(keyLenght, key, encryptedText)
+
+print("Texto decifrado salvo em decryptedText.txt")
     
-f = open("clearText.txt", "w")
-f.write(clearText)
+f = open("decryptedText.txt", "w")
+f.write(decryptedText)
 f.close()
