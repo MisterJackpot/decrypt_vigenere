@@ -14,13 +14,6 @@ def calculateIndexOfCoincidence(frequency, lenght):
         ioc = ioc + (frequency[x] * (frequency[x]-1))
     return (ioc / (float(lenght * (lenght - 1))))
 
-def getNthLetters(text, start, n):
-    value = ""
-    for i in range(0,len(text)):
-        if i%n == start:
-            value = value+text[i]
-    return value
-
 def letterFrequenciesDifference(text):
     difference = 0
     for i in range(0,NUMBER_OF_LETTERS_PORTUGUESE):
@@ -32,24 +25,12 @@ def caesarShift(text, shift):
     code = ALPHABET[shift:] + ALPHABET[:shift]
     return text.translate({ord(x):y for (x, y) in zip(ALPHABET, code)})
 
-def guessKey(text, length):
-    guess = ""
-    for i in range(0, length):
-        x = getNthLetters(text, i, length)
-        smaller = -1
-        shiftGuessed = 0
-        frequency = Counter(x)
-        for j in range(0, 3):
-            shift = ALPHABET.index(frequency.most_common()[j][0])
-            shiftedText = caesarShift(x, -shift)
-            current = letterFrequenciesDifference(shiftedText)
-            if smaller == -1:
-                smaller = current
-            if current < smaller:
-                shiftGuessed = shift
-                smaller = current
-        guess = guess+ALPHABET[shiftGuessed]
-    return guess
+def getNthLetters(text, start, n):
+    value = ""
+    for i in range(0,len(text)):
+        if i%n == start:
+            value = value+text[i]
+    return value
 
 def guessKeyLenght(encryptedText):
     keyLenght = -1
@@ -70,6 +51,25 @@ def guessKeyLenght(encryptedText):
     if keyLenght == -1:
         raise Exception("Não foi possivel encontrar tamanho da chave")
     return keyLenght
+
+def guessKey(text, length):
+    guess = ""
+    for i in range(0, length):
+        x = getNthLetters(text, i, length)
+        smaller = -1
+        shiftGuessed = 0
+        frequency = Counter(x)
+        for j in range(0, 3):
+            shift = ALPHABET.index(frequency.most_common()[j][0])
+            shiftedText = caesarShift(x, -shift)
+            current = letterFrequenciesDifference(shiftedText)
+            if smaller == -1:
+                smaller = current
+            if current < smaller:
+                shiftGuessed = shift
+                smaller = current
+        guess = guess+ALPHABET[shiftGuessed]
+    return guess
 
 def decryptText(keyLenght,key,encryptedText):
     shift = [0]*keyLenght
