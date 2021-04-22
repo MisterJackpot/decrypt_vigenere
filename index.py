@@ -56,14 +56,15 @@ def guessKey(text, length):
     guess = ""
     for i in range(0, length):
         x = getNthLetters(text, i, length)
-        smaller = -1
         shiftGuessed = 0
         frequency = Counter(x)
+        frequency = frequency.most_common()
         for j in range(0, 3):
-            shift = ALPHABET.index(frequency.most_common()[j][0])
+            shift = ALPHABET.index(frequency[j][0])
             shiftedText = caesarShift(x, -shift)
             current = letterFrequenciesDifference(shiftedText)
-            if smaller == -1:
+            if j == 0:
+                shiftGuessed = shift
                 smaller = current
             if current < smaller:
                 shiftGuessed = shift
